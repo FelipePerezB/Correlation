@@ -59,6 +59,8 @@
 .table-section{
   overflow-x: scroll;
   overflow-y: hidden;
+  box-shadow: 2px 2px 4px lightgray;
+  border-radius: 8px;
 }
 
 .table{
