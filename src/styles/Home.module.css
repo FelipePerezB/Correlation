@@ -57,14 +57,15 @@
 }
 
 .table-section{
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .table{
+  width: 100%;
   background-color: white;
   padding: 12px;
   border-radius: 4px;
-  box-shadow: 2px 2px 4px lightgray;
   border-spacing: 0;
 }
 
