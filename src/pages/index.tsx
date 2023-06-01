@@ -95,8 +95,6 @@ export default function Home() {
       const dataYString = formData.get("data-y") as string;
       const dataY = dataYString.split(",").map((a) => Number(a));
 
-      console.log(dataYString)
-
       if (dataX.length === dataY.length && dataXString) {
         setData({
           x: dataX,
