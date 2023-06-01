@@ -37,7 +37,7 @@ export default function Home() {
 
   if (data?.x && data.y) {
     const { x, y } = data;
-    xy = x.map((e, i) => e * y[i]);
+    xy = x.map((e, i) => Number((y[i] * e).toFixed(3)));
 
     const reduceCb = (a: number, b: number) => a + b;
 
@@ -45,8 +45,8 @@ export default function Home() {
     summationY = y.reduce(reduceCb);
     summationXY = xy.reduce(reduceCb);
 
-    xSquared = x.map((a) => a ** 2);
-    ySquared = y.map((a) => a ** 2);
+    xSquared = x.map((a) => Number((a ** 2).toFixed(3)));
+    ySquared = y.map((a) => Number((a ** 2).toFixed(3)));
 
     summationXSquared = xSquared.reduce(reduceCb);
     summationYSquared = ySquared.reduce(reduceCb);
@@ -95,14 +95,20 @@ export default function Home() {
       const dataYString = formData.get("data-y") as string;
       const dataY = dataYString.split(",").map((a) => Number(a));
 
-      if (dataX.length === dataY.length) {
+      console.log(dataYString)
+
+      if (dataX.length === dataY.length && dataXString) {
         setData({
           x: dataX,
           y: dataY,
         });
-        setError(null)
-      } else{
-        setError('La cantidad de valores en X debe ser igual a la cantidad de valores en Y')
+        setError(null);
+      } else if(!(dataX.length === dataY.length)) {
+        setError(
+          "La cantidad de valores en X debe ser igual a la cantidad de valores en Y."
+        );
+      } else {
+        setError("Los valores no son validos.")
       }
     }
   };
@@ -120,11 +126,19 @@ export default function Home() {
             <form ref={formRef} onSubmit={handleSubmit}>
               <label>
                 <span>Valores x</span>
-                <input className={styles.input} type="text" name="data-x" />
+                <input
+                  className={styles.input}
+                  placeholder="2, 3, 5, 1"
+                  name="data-x"
+                />
               </label>
               <label>
                 <span>Valores y</span>
-                <input className={styles.input} type="text" name="data-y" />
+                <input
+                  className={styles.input}
+                  placeholder="4, 8, 3, 4"
+                  name="data-y"
+                />
               </label>
               <p className={styles.error}>{error}</p>
               <button className={styles.button}>Calcular</button>
@@ -136,81 +150,115 @@ export default function Home() {
           <>
             <section>
               <h2>Tabla</h2>
-              <table className={styles.table}>
-                <tbody className={styles.tbody}>
-                  {/* X */}
-                  <tr className={styles.row1}>
-                    <th className={styles.row}>X</th>
-                    {data.x.map((number, i) => (
-                      <th key={number + `${i}`}>{number}</th>
-                    ))}
-                  </tr>
-                  {/* Y */}
-                  <tr>
-                    <th className={styles.row}>Y</th>
-                    {data.y.map((number, i) => (
-                      <th key={number + `${i}`}>{number}</th>
-                    ))}
-                  </tr>
-                  {/* X ** 2 */}
-                  <tr>
-                    <th className={styles.row}>X²</th>
-                    {xSquared?.map((number, i) => (
-                      <th key={number + `${i}`}>{number}</th>
-                    ))}
-                  </tr>
-                  {/* Y ** 2 */}
-                  <tr>
-                    <th className={styles.row}>Y²</th>
-                    {ySquared?.map((number, i) => (
-                      <th key={number + `${i}`}>{number}</th>
-                    ))}
-                  </tr>
-                  {/* XY */}
-                  <tr>
-                    <th className={styles.row}>XY</th>
-                    {xy?.map((number, i) => (
-                      <th key={number + `${i}`}>{number}</th>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
+              <div className={styles["table-section"]}>
+                <table className={styles.table}>
+                  <tbody className={styles.tbody}>
+                    {/* X */}
+                    <tr className={styles.row1}>
+                      <th className={styles.row}>X</th>
+                      {data.x.map((number, i) => (
+                        <th key={number + `${i}`}>{number}</th>
+                      ))}
+                    </tr>
+                    {/* Y */}
+                    <tr>
+                      <th className={styles.row}>Y</th>
+                      {data.y.map((number, i) => (
+                        <th key={number + `${i}`}>{number}</th>
+                      ))}
+                    </tr>
+                    {/* X ** 2 */}
+                    <tr>
+                      <th className={styles.row}>X²</th>
+                      {xSquared?.map((number, i) => (
+                        <th key={number + `${i}`}>{number}</th>
+                      ))}
+                    </tr>
+                    {/* Y ** 2 */}
+                    <tr>
+                      <th className={styles.row}>Y²</th>
+                      {ySquared?.map((number, i) => (
+                        <th key={number + `${i}`}>{number}</th>
+                      ))}
+                    </tr>
+                    {/* XY */}
+                    <tr>
+                      <th className={styles.row}>XY</th>
+                      {xy?.map((number, i) => (
+                        <th key={number + `${i}`}>{number}</th>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </section>
             <section>
               <h2>Resultados</h2>
               <div className={styles.info}>
                 <div className={styles.value}>
                   <span className={styles.name}>Promedio x</span>
-                  <span className={styles.result}>{AVGx}</span>
+                  <span className={styles.result}>
+                    {Number(AVGx?.toFixed(5))}
+                  </span>
                 </div>
                 <div className={styles.value}>
                   <span className={styles.name}>Promedio y</span>
-                  <span className={styles.result}>{AVGy}</span>
+                  <span className={styles.result}>
+                    {Number(AVGy?.toFixed(5))}
+                  </span>
+                </div>
+                <div className={styles.value}>
+                  <span className={styles.name}>Varianza x</span>
+                  <span className={styles.result}>
+                    {Number(VARx?.toFixed(5))}
+                  </span>
+                </div>
+                <div className={styles.value}>
+                  <span className={styles.name}>Varianza y</span>
+                  <span className={styles.result}>
+                    {Number(VARy?.toFixed(5))}
+                  </span>
+                </div>
+                <div className={styles.value}>
+                  <span className={styles.name}>Desv estándar x</span>
+                  <span className={styles.result}>
+                    {Number(SDx?.toFixed(5))}
+                  </span>
+                </div>
+                <div className={styles.value}>
+                  <span className={styles.name}>Desv estándar y</span>
+                  <span className={styles.result}>
+                    {Number(SDy?.toFixed(5))}
+                  </span>
                 </div>
                 <div className={styles.value}>
                   <span className={styles.name}>CVx</span>
-                  <span className={styles.result}>{CVx?.toFixed(5)}</span>
+                  <span className={styles.result}>
+                    {Number(CVx?.toFixed(5))}
+                  </span>
                 </div>
                 <div className={styles.value}>
                   <span className={styles.name}>CVy</span>
-                  <span className={styles.result}>{CVy?.toFixed(5)}</span>
+                  <span className={styles.result}>
+                    {Number(CVy?.toFixed(5))}
+                  </span>
                 </div>
                 <div className={styles.value}>
                   <span className={styles.name}>Covarianza</span>
                   <span className={styles.result}>
-                    {covariance?.toFixed(5)}
+                    {Number(covariance?.toFixed(5))}
                   </span>
                 </div>
                 <div className={styles.value}>
                   <span className={styles.name}>Correlación</span>
                   <span className={styles.result}>
-                    {correlation?.toFixed(5)}
+                    {Number(correlation?.toFixed(5))}
                   </span>
                 </div>
               </div>
             </section>
             <section>
-              <h2>Grafico</h2>
+              <h2>Gráfico</h2>
               <div className={styles.chart}>
                 <Scatter
                   data={chartData as any}

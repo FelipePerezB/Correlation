@@ -56,10 +56,11 @@
   flex-direction: column;
 }
 
+.table-section{
+  overflow: scroll;
+}
+
 .table{
-  width: 100%;
-  padding: 0;
-  gap: 16px;
   background-color: white;
   padding: 12px;
   border-radius: 4px;
@@ -69,10 +70,10 @@
 
 .tbody th{
   border-top: 2px solid black;
+  padding: 12px;
 }
 
 .row{
-  padding: 8px;
   font-weight: 800;
   border-right: 2px solid black;
 }
